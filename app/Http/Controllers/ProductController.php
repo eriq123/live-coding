@@ -17,6 +17,8 @@ class ProductController extends Controller
 
     public function productById($id)
     {
+        if (!isset($id)) abort(401);
+
         $product = Product::find($id);
 
         return response()->json($product);
@@ -69,7 +71,7 @@ class ProductController extends Controller
         $fileName = time() . '.' . $request->image->extension();
         Storage::putFileAs('images/' . $product->id, $request->image, $fileName);
 
-        $product->image = $fileName;
+        $product->image = 'images/' . $product->id . '/' . $fileName;
         $product->save();
 
         return response()->json($product);
